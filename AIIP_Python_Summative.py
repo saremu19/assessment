@@ -1,4 +1,7 @@
 # Import random module to use the random method => generates numbers between 0 and 1
+from random import randrange
+import datetime
+
 import random as rand
 
 # Create a list to hold all the generated sensor data
@@ -20,8 +23,9 @@ while sensor<=32:
             sensorData.append(sensorDataNumber)
 
             print(sensorData)
+            print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
-    report.write('Readings for sensor {}'.format(sensor) + str(sensorData))
+    report.write('Readings for sensor {}'.format(sensor) + str(sensorData)+str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
     report.write("\n")
 
 
@@ -29,26 +33,49 @@ while sensor<=32:
 
 
 
-def checkerror(errorthreshold):
+def checkerror(errorvalue):
     import random as rand
+    import datetime
+
+    global sensorerror
 
     sensorerror = 1
+    sensorerrordata32 = []
+
+    errorReport = open("SensorError2.txt", "w")
+    newerrorreport = open('Errorreadings2.txt', 'w')
 
     while sensorerror <= 32:
-        sensorerrorData = []
+
+        sensorerrordata = []
+
         for j in range(16):
-            sensorerrorDatanumber = rand.random()
-            #if sensorerrorDatanumber(j) > errorthreshold:
-                #sensorerrorDatanumber[reading] = 'err'
-            sensorerrorData.append(sensorerrorDatanumber)
+            sensorerrordatanumber = rand.random()
 
-            print(sensorerrorData)
+            sensorerrordata.append(sensorerrordatanumber)
 
-        errorReport = open("SensorError1.txt", "w")
-        errorReport.write("Reading with error from sensor {}".format(sensorerror) + str(sensorerrorData))
+            print(sensorerrordata)
+            # print("\n")
+
+        errorReport.write("Reading with error from sensor {}".format(sensorerror) + str(sensorerrordata) + str(
+            datetime.datetime.now()))
         errorReport.write("\n")
+        errorReport.write("\n")
+
+        errordata = []
+        for erroritem in sensorerrordata:
+            if erroritem < errorvalue:
+                erroritem = 'SenError'
+            errordata.append(erroritem)
+        sensorerrordata = errordata
+
+        newerrorreport.write(
+            "Reading Errors from sensor {}".format(sensorerror) + str(sensorerrordata) + str(datetime.datetime.now()))
+        newerrorreport.write("\n")
+        newerrorreport.write("\n")
 
         sensorerror = sensorerror + 1
 
 
-checkerror(float(0.5000000))
+checkerror(0.1)
+
