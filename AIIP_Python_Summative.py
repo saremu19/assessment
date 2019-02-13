@@ -1,5 +1,5 @@
 # Import random module to use the random method => generates numbers between 0 and 1
-from random import randrange
+# Import datetime to include date and time stamp on the randomly generated numbers
 import datetime
 
 import random as rand
@@ -8,9 +8,9 @@ import random as rand
 global sensor
 sensor=1
 sensorReading32=[]
-
+# Open a file to hold the generated data from each sensor
 report = open("sensorfile.txt", "w")
-
+# Loop for 32 arrays of sensors
 while sensor<=32:
 
     sensorData = []
@@ -24,7 +24,7 @@ while sensor<=32:
 
             print(sensorData)
             print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-
+# Write the generated sensor data to the initially opened
     report.write('Readings for sensor {}'.format(sensor) + str(sensorData)+str(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
     report.write("\n")
 
@@ -32,7 +32,9 @@ while sensor<=32:
     sensor=sensor+1
 
 
-
+# Write a function to generate new data from the sensors
+# The function will identify errors in the generated data
+# The error is defined by a threshold value called errorvalue below which the function will report error
 def checkerror(errorvalue):
     import random as rand
     import datetime
@@ -41,7 +43,7 @@ def checkerror(errorvalue):
 
     sensorerror = 1
     sensorerrordata32 = []
-
+    # open files to hold the sensors data with string errors
     errorReport = open("SensorError2.txt", "w")
     newerrorreport = open('Errorreadings2.txt', 'w')
 
@@ -76,6 +78,6 @@ def checkerror(errorvalue):
 
         sensorerror = sensorerror + 1
 
-
+# Call the function with a threshold value of 0.1
 checkerror(0.1)
 
