@@ -9,7 +9,7 @@ global sensor
 sensor=1
 sensorReading32=[]
 # Open a file to hold the generated data from each sensor
-report = open("sensorfile.txt", "w")
+report = open("SensorData.txt", "w")
 # Loop for 32 arrays of sensors
 while sensor<=32:
 
@@ -44,8 +44,9 @@ def checkerror(errorvalue):
     sensorerror = 1
     sensorerrordata32 = []
     # open files to hold the sensors data with string errors
-    errorReport = open("SensorError2.txt", "w")
-    newerrorreport = open('Errorreadings2.txt', 'w')
+    errorReport = open("SensorsData2.txt", "w")
+    newerrorreport = open('CorruptedSensorData.txt', 'w')
+    logreport=open('Error_Log_Report.txt', 'w+')
 
     while sensorerror <= 32:
 
@@ -65,19 +66,29 @@ def checkerror(errorvalue):
         errorReport.write("\n")
 
         errordata = []
-        for erroritem in sensorerrordata:
-            if erroritem < errorvalue:
-                erroritem = 'SenError'
-            errordata.append(erroritem)
+        for item in sensorerrordata:
+            if item < errorvalue:
+                item = 'err'
+            errordata.append(item)
         sensorerrordata = errordata
+
+        print(sensorerrordata)
+
+        if "err" in sensorerrordata:
+            print("Error Data found in sensor {}".format(sensorerror), file=logreport)
+        else:
+            print("No error in sensor {}".format(sensorerror), file=logreport)
 
         newerrorreport.write(
             "Reading Errors from sensor {}".format(sensorerror) + str(sensorerrordata) + str(datetime.datetime.now()))
         newerrorreport.write("\n")
         newerrorreport.write("\n")
 
+
+
         sensorerror = sensorerror + 1
 
-# Call the function with a threshold value of 0.1
-checkerror(0.1)
+# The sensor will print string error whenever a value less than 0.01 if generated
+# Call the function
+checkerror(0.01)
 
